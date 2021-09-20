@@ -128,6 +128,14 @@ begin
         apply or.intro_right, exact r,
   --backwards
   assume right,
+  have porq: P∨Q:= and.elim_left right,
+  have porr: P ∨ R:= and.elim_right right,
+  ---IDK
+  cases porq,
+  apply or.intro_left,exact porq,
+  cases porr,
+  apply or.intro_left,exact porr,
+  apply or.intro_right, apply and.intro porq porr,
   
 
 
@@ -136,6 +144,15 @@ end
 
 example : ∀ (P Q : Prop), P ∧ (P ∨ Q) ↔ P := 
 begin
+  assume P Q, 
+  apply iff.intro,
+  assume left,
+  apply and.elim_left left,
+  --backwards
+  assume p,
+  apply and.intro _ _,
+  exact p,
+  apply or.intro_left, exact p,
 end
 
 example : ∀ (P Q : Prop), P ∨ (P ∧ Q) ↔ P := 
@@ -172,6 +189,15 @@ end
 
 example : ∀ (P : Prop), P ∨ false ↔ P := 
 begin
+  assume P,
+  apply iff.intro,
+  assume lft,
+  cases lft,
+    apply lft,
+  cases lft,
+
+  assume p,
+  apply or.intro_left, exact p,
 end
 
 example : ∀ (P : Prop), P ∧ true ↔ P := 
@@ -187,6 +213,14 @@ end
 
 example : ∀ (P : Prop), P ∧ false ↔ false := 
 begin
+  assume P,
+  apply iff.intro,
+  assume left,
+  cases left,
+  exact left_right,
+
+  assume f,
+  exact false.elim f,
 end
 
 
