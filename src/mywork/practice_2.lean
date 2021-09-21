@@ -27,7 +27,9 @@ begin
   exact or.intro_left P p,
 end
 /-
-To prove that P or P is true if and only if P is true
+Proof: We assume that P is an arbitrary but specific proposition. Then we apply introduction rule for iff.
+We prove iff in the forwards direction by applying the elimination rule for or. We prove it in the backwards
+direction by using introduction rule for or. QED.
 -/
 
 
@@ -43,6 +45,12 @@ begin
 
 end
 
+/-
+Proof: We assume P is an arbitrary but specific proposition. Then we apply introduction rule for iff. 
+We prove implication in the forwards direction using intro rule of →  and elimination rule of ∧ .
+Then we prove it in the backwards direction using the introduction rule for → and ∧ . QED.
+-/
+
 example : ∀ (P Q : Prop), P ∨ Q ↔ Q ∨ P := 
 begin
   assume P Q,
@@ -54,7 +62,7 @@ begin
       
       assume q,
       apply or.intro_left, exact q,
-    ------do it
+    ------reverse
     assume qp,
     apply or.elim qp,
       assume q,
@@ -63,20 +71,27 @@ begin
       assume p,
       apply or.intro_left, exact p,
 end
-
+/-
+Proof: We assume P and Q are propositions. Then we apply introduction rule for iff. 
+We prove iff in the forwards direction using the intro of → and eliminaton and introduction rules for ∨ . 
+We prove iff in the backwards direction by applying the intro of → and elimination and introduction rules for ∨ . QED. 
+-/
 example : ∀ (P Q : Prop), P ∧ Q ↔ Q ∧ P := 
 begin
   assume P Q,
   apply iff.intro _ _,
-  --Left
+  --forwards
     assume pq,
     apply and.intro(and.elim_right pq) (and.elim_left pq),
-  --right
+  --backwards
     assume qp,
     apply and.intro(and.elim_right qp) (and.elim_left qp),
-
 end
-
+/-
+Proof: We assume P and Q are propositions then apply intro for ↔. 
+Then we prove ↔ in the forwards direction using intro for → and intro and elim for ∧ . 
+We prove ↔ in the backwards direction using intro for → and intro and elim for ∧. QED. 
+-/
 example : ∀ (P Q R : Prop), P ∧ (Q ∨ R) ↔ (P ∧ Q) ∨ (P ∧ R) := 
 begin
   assume P Q R,
@@ -106,7 +121,14 @@ begin
 
       apply or.intro_right, apply and.elim_right pr,  
 end
+/-
+Proof: We assume P Q and R are propositions then apply intro for ↔ . 
+To prove ↔ in the forward direcction we let p be a proof of P and qr be a proof of Q∨R using elim for ∧.
+Then using the elim rule for ∨ on qr, the intro for →, the intro rules for ∧ and ∨ along with p we provvee ↔ in the forwards direction. 
 
+
+-/
+idk how depth to do this thingy ^^^^^ or any of them  so tedious bruh
 example : ∀ (P Q R : Prop), P ∨ (Q ∧ R) ↔ (P ∨ Q) ∧ (P ∨ R) := 
 begin
   assume P Q R,
