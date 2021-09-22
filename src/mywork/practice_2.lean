@@ -9,7 +9,7 @@ and/or theorems that you use.
 example : true := true.intro
 --Using introduction rule for true shows true is true.
 
---example : false :=     -- trick question? why?
+--example : false :=   -- trick question? why?
   --Because false cannot be proved true. By definition false 
   --has no proofs
 
@@ -128,7 +128,7 @@ Then using the elim rule for ∨ on qr, the intro for →, the intro rules for �
 
 
 -/
-idk how depth to do this thingy ^^^^^ or any of them  so tedious bruh
+
 example : ∀ (P Q R : Prop), P ∨ (Q ∧ R) ↔ (P ∨ Q) ∧ (P ∨ R) := 
 begin
   assume P Q R,
@@ -158,12 +158,17 @@ begin
   cases porr,
   apply or.intro_left,exact porr,
   apply or.intro_right, apply and.intro porq porr,
-  
-
-
 
 end
+/-
+  Proof: We assume P Q and R are propositions. Then
+  apply introduction rule for ↔. TO prove the forwards direction
+  You first use the introduction rule for → then apply elimination rule for ∨. Then using intro rule for ∧ and ∨ prove that P → (P ∨ Q) ∧ (P ∨ R).
+  To prove Q ∧ R → (P ∨ Q) ∧ (P ∨ R) you use elimination rule for ∧ and intro rules for ∧ and ∨. 
 
+  To prove iff in the backwards direction first use intro for → .
+  Then use case studies on both or statements in your assumption in conjunction with introduction rule for ∨ to complete the proof.
+-/
 example : ∀ (P Q : Prop), P ∧ (P ∨ Q) ↔ P := 
 begin
   assume P Q, 
@@ -176,6 +181,12 @@ begin
   exact p,
   apply or.intro_left, exact p,
 end
+/-
+Proof: We assume P and Q are propositions then apply the intro rule for ↔. 
+To prove the forwards direction you intro for → and elimination rule for ∧. 
+To prove the backwards direction you first use intro rule for → ,
+then build the and statement using ∧'s intro rule along with our assumption of P and introduction rule for ∨.
+-/
 
 example : ∀ (P Q : Prop), P ∨ (P ∧ Q) ↔ P := 
 begin
@@ -192,22 +203,32 @@ begin
   apply or.intro_left,
   apply p,
 end
+/-
+  Proof: To prove P ∨ (P ∧ Q) ↔ P we first assume P Q are arbitrary but specific propositions.
+  The we apply introduction rule for iff. To prove the forwards direction, P ∨ P ∧ Q → P,
+  you apply intro for →. You assume P ∨ (P ∧ Q), then apply elimination rule for or on that assumption. You prove P → P by using → introduction rule.
+  Then prove that P∧Q → P using ∧'s elimination rule.
 
+  To prove iff's reverse direction, P → P ∨ P ∧ Q, We assume p as a proof of P. Then using introduction rule for ∨ and our proof p to complete our proof.
+-/
 example : ∀ (P : Prop), P ∨ true ↔ true := 
 begin
   assume P,
   apply iff.intro,
   assume portrue,
-  apply or.elim portrue,
-    assume p, apply true.intro,
-
-    assume tr, exact true.intro,
+  exact true.intro,
   
   assume tr, 
   apply or.intro_right,
     apply tr,
 
 end
+/-
+Proof: To prove P ∨ true ↔ true we first assume P is a proposition.
+Then we apply intro rule for iff. Then we use intro rule → and assume P∨true.
+We prove true using intro rule for true. 
+To prove the reverse direction you assume true using → intro and then use ∨ intro rule to prove P∨true.QED
+-/
 
 example : ∀ (P : Prop), P ∨ false ↔ P := 
 begin
@@ -221,7 +242,12 @@ begin
   assume p,
   apply or.intro_left, exact p,
 end
-
+/-
+Proof: To prove P ∨ false ↔ P we first assume P is a proposition.
+Then we apply intro rule for iff. to prove the forwards dirrection we assume 
+P∨false. Using case studies we show that P→P and that false→P has no possible cases.
+To prove the reverse direcction we assume P and using introduction rule for ∨ to prove P∨false.QED. 
+-/
 example : ∀ (P : Prop), P ∧ true ↔ P := 
 begin
   assume P,
@@ -232,17 +258,26 @@ begin
     assume p,
     apply and.intro p true.intro,
 end
-
+/- 
+Proof. To prove P ∧ true ↔ P we first assume P is a proposition.
+Then we apply intro rule for ↔. To prove the forwards direction we assume P∧true
+and use elimination rule for ∧ to prove P. To prove the reverse direction
+we assume P and prove P∧true using intro rule for ∧, our assumption p, and intro rule for true.QED
+-/
 example : ∀ (P : Prop), P ∧ false ↔ false := 
 begin
   assume P,
   apply iff.intro,
-  assume left,
-  cases left,
-  exact left_right,
+  assume lft,
+  apply and.elim_right lft,
 
   assume f,
   exact false.elim f,
 end
-
+/-
+Proof: To prove P ∧ false ↔ false we have to show that both sides are always false, so we show the contradictions.
+We assume P is a proposition and then apply intro rule for ↔. To proof the forwards direction
+we assume P∧false using the intro for → and prove false→false using elimination rule for and. 
+To prove the reverse direction we assume the premise, false, and use the elimination rule for false.
+-/
 
