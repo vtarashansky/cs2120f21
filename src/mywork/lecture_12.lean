@@ -30,7 +30,7 @@ begin
 
   -/
   apply exists.intro 4 _, -- proof of ev 2 tbd
-  --unfold ev,            -- remind me what ev 2 means
+  unfold ev,            -- remind me what ev 2 means
   exact rfl,
 end
 
@@ -84,7 +84,7 @@ Let's demand a proof of the proposition that
 -/
 example : pythagorean_triple 3 4 5 := 
 begin
-  --unfold pythagorean_triple, -- expand proposition to prove
+  unfold pythagorean_triple, -- expand proposition to prove
   apply rfl,
 end
 
@@ -99,7 +99,10 @@ that the proposition is not true.
 example : ∀ (n : ℕ), ∃ (m : ℕ), n = 2 * m :=
 begin
   intros,
-  apply exists.intro _,
+  apply exists.intro 3_,
+  
+  
+  
   -- stuck
 end
 
