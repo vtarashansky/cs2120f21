@@ -420,17 +420,24 @@ begin
   contradiction,
   
   assume exmid,
-  --apply classical.em,
-  
+  apply classical.em,
 end
 
 /- 
 EXTRA CREDIT: Formally express and prove the
 proposition that if there is someone everyone
 loves, and loves is a symmetric relation, then 
-thre is someone who loves everyone. [5 points]
+there is someone who loves everyone. [5 points]
 -/
 
 axiom Loves : Person → Person → Prop
-
-example : ∃(pl:Person), ∀(p:Person)Loves p p1 → ∀(p:Person) Loves p1 P := _
+axiom LoveSymm: ∀(p1 p2:Person),Loves p1 p2 → Loves p2 p1
+example : (∃(loved:Person), ∀(p:Person),Loves p loved) → ∀(persons:Person),∃(lover:Person), Loves lover persons:= 
+begin
+  assume everyoneLovesLoved,
+  cases everyoneLovesLoved with loved lovesLoved,
+  assume person,
+  apply exists.intro loved,
+  apply LoveSymm,
+  apply lovesLoved person,
+end
