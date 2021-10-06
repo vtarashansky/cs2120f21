@@ -14,20 +14,6 @@ example : false :=     -- trick question? why?
 
 example : ∀ (P : Prop), P ∨ P ↔ P := 
 begin
-  assume P, 
-  apply iff.intro _ _,
-  -- forward
-    assume porp,
-    apply or.elim porp,
-    -- left disjunct is true
-      assume p,
-      exact p,
-    -- right disjunct is true
-      assume p,
-      exact p,
-  -- backwards
-    assume p,
-    exact or.intro_left P p,
 end
 /-
 To prove that P or P is true if and only if P is true

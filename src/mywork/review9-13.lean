@@ -53,3 +53,9 @@ axioms
   #check pf t
   
 end all
+example : ∀ (P Q : Prop) (p2q : P → Q) (q: Q), P :=
+begin
+  assume P Q,
+  assume p2q,
+  appl imply
+end

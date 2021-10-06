@@ -24,6 +24,7 @@ all propositions in Lean).
 -/
 
 def prop_1 : Prop := 
+<<<<<<< HEAD:src/homework/practice_1.lean
   ∀ (T:Type)
     (x y z w:T),
     x = y → 
@@ -31,6 +32,9 @@ def prop_1 : Prop :=
     w = z →
     z = w 
 
+=======
+  ∀ (T : Type) (x y z w : T), x = y → y = z → w = z → z = w
+>>>>>>> fcba5ad44160653f0c0421bdee35d9d0532b3390:src/homework/hw1and2.lean
 
 /- #3 (extra credit)
 Give a formal proof of the proposition from #2 by filling in
@@ -41,11 +45,17 @@ again, called eq.refl, eq.subst, eq.symm, eq.trans.
 
 theorem prop_1_proof : prop_1 := 
 begin
+<<<<<<< HEAD:src/homework/practice_1.lean
   unfold prop_1,
   assume T x y z w e1 e2 e3,
   rw e3
   /-apply eq.subst e3,
   exact eq.refl w-/
+=======
+  assume T x y z w,
+  assume xy yz zw,
+  exact eq.symm zw,
+>>>>>>> fcba5ad44160653f0c0421bdee35d9d0532b3390:src/homework/hw1and2.lean
 end
 
 /-
@@ -59,6 +69,11 @@ what do you do? (I'm being a little informal in leaving out the
 type of X.) 
 -/
 
+/-
+Assume you;re given an arbitrary but specific x, show that 
+it satisfies P;  because the choice  was arbirtrary, P must be
+true of any x (you could have picked any of them!)-/
+
 /- #5
 Suppose you have a proof, let's call it pf, of the proposition,
 (∀ x, P x), and you need a proof of P t, for some particular t.
@@ -66,6 +81,26 @@ Write an expression then uses the elimination rule for ∀ to get
 such a proof. Complete the answer by replacing the underscores
 in the following expression: ( _ _ ). 
 -/
+
+
+axioms 
+(Ball : Type)
+(blue : Ball → Prop)
+(allBallsBlue : ∀ (b : Ball), blue b)
+(tomsBall : Ball)
+
+theorem tomsBallIsBlue : blue tomsBall := 
+  allBallsBlue tomsBall
+
+#check allBallsBlue
+
+example : ∀ (P Q : Prop), P ∧ Q → Q ∧ P :=
+begin
+  assume P Q h,
+  have p : P := h.left,
+  have q : Q := h.right,
+  exact and.intro q p,
+end
 
 /-
 IMPLIES: →
@@ -88,7 +123,7 @@ Hint: put parenthesis around "n + 1" in your answer.
 -/
 
 def successor_of_even_is_odd : Prop := 
-  _
+  ∀ (n : ℕ), ev n → odd (n + 1)
 
 /- #7
 Suppose that "its_raining" and "the_streets_are_wet" are
@@ -100,7 +135,7 @@ by filling in the hole
 
 axioms (raining streets_wet : Prop)
 
-axiom if_raining_then_streets_wet : _
+axiom if_raining_then_streets_wet : raining → streets_wet
   
 
 /- #9
@@ -114,7 +149,7 @@ you are asked to use the elimination rule for →.
 axiom pf_raining : raining
 
 example : streets_wet :=
- _
+ if_raining_then_streets_wet pf_raining
 
 /- 
 AND: ∧
@@ -161,7 +196,11 @@ theorem and_associative :
 begin
   intros P Q R h,
   have p : P := and.elim_left h,
+<<<<<<< HEAD:src/homework/practice_1.lean
   
+=======
+  have q : Q := (and.elim_right h).left
+>>>>>>> fcba5ad44160653f0c0421bdee35d9d0532b3390:src/homework/hw1and2.lean
 end
 
 /- #11
