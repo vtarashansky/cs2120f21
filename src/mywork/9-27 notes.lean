@@ -38,22 +38,3 @@ begin
 
 end
 
-def negelim_equiv_exmid : Prop := 
-  ∀(P:Prop), P ∨ ¬P ↔ ((P→false)→false)→P
-example:negelim_equiv_exmid:=
-begin 
-  unfold negelim_equiv_exmid,
-  assume P,
-  apply iff.intro,
-  assume exmid,
-  cases exmid,
-  assume np,
-  exact exmid,
-  assume nnp,
-  contradiction,
-  assume negelim,
-  apply or.intro_left,
-  
-
-  
-end

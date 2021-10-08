@@ -55,7 +55,7 @@ end
 
 -- Extra credit [2 points]. Who invented this principle?
 
---Bertrand Russell
+--Aristotle
 
 -- -------------------------------------
 
@@ -125,8 +125,8 @@ inference rule and English language forms.
 English: Given proposiitons, P and Q, and a proof of P ∧ Q
 we can derive proofs of P and Q using the left and right elimination
 rules for -and, respectively. This is because to prove P ∧ Q 
-it is required to have a proofs of both P and Q, so the elimination
-rule gives these proofs.
+it is required to have proofs of both P and Q, so the elimination
+rules return these proofs.
 
 (P Q : Prop) (pq: P ∧ Q)
 ---------------------------- intro
@@ -185,7 +185,7 @@ proof of Q.
 
 -- In lean our proof,pf , is a function that takes any arbitrary object of type T as an argument
 --and returns a proof of Q. We apply this funtion to our given, t,
---of type T and derive a proof of Q. 
+--of type T and and it returns a proof of Q. 
 
 
 -/
@@ -242,8 +242,8 @@ of "proof by negation." Explain how one uses this
 strategy to prove a proposition, ¬P. 
 -/
 
--- Proof by negation is a strategy in where ¬P is turned into
---P→false. You assume that P is true and show that is a contradictio
+-- Proof by negation is a strategy in which ¬P is turned into
+--P→false. You assume that P is true and show that it leads to a contradiction
 --because false has no proofs. So, P must be false and ¬P is true.
 
 /-
@@ -254,14 +254,14 @@ the lack of a ¬ in front of the P).
 
 Fill in the blanks the following partial answer:
 
-To prove P, assume ¬¬P and show that ¬P→fals.
+To prove P, assume ¬¬P and show that ¬P→false.
 From this derivation you can conclude (P→false)→false.
 Then you apply the rule of negation elimination
-to that result to arrive a a proof of P. We have
+to that result to arrive at a proof of P. We have
 seen that the inference rule you apply in the 
 last step is not constructively valid but that it
 is Classicaly valid, and that accepting the axiom
-of the p ∨ ¬P suffices to establish negation
+of the exluded middle suffices to establish negation
 elimination (better called double negation elimination)
 as a theorem.
 -/
@@ -334,7 +334,12 @@ def ELJL : Prop :=
     (∀ (p : Person), Likes p JohnLennon) 
     
 /-
-  The proposition ELJL states that everyone likes John Lennon
+  The proposition ELJL states that for all people
+  who can be nice, who can be talented, 
+  who can like another person, and who all like a
+  nice, talented, person. It then states that John Lennon
+  is a person and he is nice and talented. Lastly it says
+   everyone must like John Lennon.
 -/
 example : ELJL :=
 begin
@@ -420,6 +425,7 @@ begin
   contradiction,
   
   assume exmid,
+  
   apply classical.em,
 end
 
