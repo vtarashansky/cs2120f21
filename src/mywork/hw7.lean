@@ -2,18 +2,38 @@ import ..instructor.lectures.lecture_23
 
 namespace relation
 
+-- PRELIMINARY SETUP
+
 /-
-Define relation, r, as two-place predicate on 
-a type, β, with notation, x ≺ y, for (r x y). 
+Preliminary set up. For the rest of this file,
+we specify an arbitrary binary relation, r, on
+an arbitrary type, β, as a two-place predicate, 
+with infix notation x ≺ y for (r x y). One can
+pronounce these expressions in English as "x is
+related to y".
 -/
 variables {α β : Type}  (r : β → β → Prop)
-local infix `≺`:50 := r  
--- Strangely Lean's library does define asymmetric, so here it is.
+local infix `≺` : 50 := r  
+
+
+/-
+The default Lean libraries are missing definitions
+for the assympetric property of relations and for
+the notion of a powerset. We define these terms for
+use in the rest of this file.
+-/
 def asymmetric := ∀ ⦃x y⦄, x ≺ y → ¬ y ≺ x
+def powerset (s : set β) := { s' | s' ⊆ s}
 
 
+-- PROBLEMS
 
--- Prove both formally and in English.
+/- 
+#1: Give both a formal and an English-language proof. Then
+answer the question, is the proposition true if you remove
+the first condition, that β is inhabited? Briefly explain
+your answer (in English).
+-/
 example : (∃ (b : β), true) → asymmetric r → ¬reflexive r :=
 begin
   unfold asymmetric reflexive,
@@ -23,25 +43,30 @@ begin
   have rbb:= refl b,
   have nrbb:= assym rbb,
   contradiction,
-  
-
 end
---------------NEED ENGLISH
+
 
 
 /-
-Logic, like programming, is subtle. It's very easy for humans
+#2. Logic, like programming, is subtle. It's very easy for humans
 to miss subtle corner cases. As an example, today I ran across
 a problem in a textbook by Paul Traiger, a professor emeritus
 of philosophy and cognitive science at Occidental College. He
 asks students to prove that if a relation is both transitive and 
-reflexive that it cannot be anti-symmetric. Is it actually true?
-If not, what condition needs to be added to make it true? See
+reflexive that it cannot be anti-symmetric. See the question at
+the very bottom of the page here:
 https://sites.oxy.edu/traiger/logic/exercises/chapter13/properties_of_relations_exercise.html
+
+Is the conjecture actually logically valid? If not, what condition 
+needs to be added to make it so? Try prove this/his version of the
+conjecture, as articulated slightly differently below. If you get
+stuck, then you need to figure out an additional condition that needs 
+to be added as a premise to make the proposition true. In that case,
+add the premise and then show that the updated conjecture is true.
 -/
-example :(∃ (b : β), true)→  transitive r → reflexive r → ¬ asymmetric r :=
+example : (∃ (b : β), true)→  transitive r → reflexive r → ¬ asymmetric r :=
 begin
-  unfold transitive reflexive asymmetric,
+   unfold transitive reflexive asymmetric,
   assume  ex tran refl,
   assume asymm,
   cases ex with b pf,
@@ -52,15 +77,13 @@ end
 
 
 
+
+
 /-
-State and prove that the subset relation on the powerset of any
-set, s, is antisymmetric. Formally state and prove, and then give
-an informal proof, of this proposition. You may use the following
-formal definition of the powerset of a given set, s. 
+#3: Prove that the subset relation on the powerset of any
+set, s, is antisymmetric. Formally state and prove, and
+then give an informal proof of, this proposition.
 -/
-
-def powerset (s : set β) := { s' | s' ⊆ s}
-
 example : ∀ (s : set β) 
             (s1 s2 ∈ powerset s), 
             s1 ⊆ s2 → 
@@ -81,107 +104,134 @@ begin
 end
 
 
----------------------------NEED ENGLISH  
-
 /-
 Given two natural numbers, n and m, we will say that m divides n
 if there is a natural number, k, such that n = k*m. Here's a formal
 definition of this relation.
 -/
-
 def divides (m n : ℕ) := ∃ k, n = k * m
 
+
 /- 
-#3: Formally state and prove each of the following propositions.
-Remember that the ring tactic is useful for producing proofs of
-algebraic equalities involving + and *. You can use the phrase,
-"by basic algebra" when translating the use of this tactic into
-English.
+#4: Formally and informally state and prove each of the following
+propositions. Remember that the ring tactic is useful for producing
+proofs of simple algebraic equalities involving + and *. You can use
+the phrase, "by basic algebra" when translating the use of this tactic
+into English. (Or if you wanted to be truly Hobbit-like you could say 
+"by the ring axioms!")
 -/
 
--- 3a: For any n, 1 divides n.
-
+-- A: For any n, 1 divides n.
 example : ∀ n, divides 1 n :=
 begin
+  assume n,
+  unfold divides,
+  apply exists.intro n,
+  ring,
 end
 
--- 3b. For any n, n divides n
-
+-- B. For any n, n divides n
 example : ∀ n, divides n n :=
 begin
+  assume n,
+  unfold divides,
+  apply exists.intro 1,
+  ring,
 end
 
--- #3c. divides is reflexive (use our reflexive predicate)
-
+-- #C. prove that divides is reflexive 
 example : reflexive divides :=
 begin
+  unfold reflexive,
+  assume x,
+  unfold divides,
+  apply exists.intro 1,
+  ring,
 end 
 
--- #3d. divides is transitive
-
-example : ∀ h n k, divides h n → divides n k → divides h k :=
+-- #D. prove that divides is transitive
+example : transitive divides :=
 begin
+  unfold transitive divides,
+  assume x y z xdivy ydivz,
+  apply exists.intro 1,
+  cases xdivy with k xdy,
+  cases ydivz with j ydz,
+  ring,
+  
 end 
 
 /- 
-#3d. is divides symmetric? if yes, give a proof, otherwise 
+E. Is divides symmetric? if yes, give a proof, otherwise 
 give a counterexample and a brief explanation to show that 
 it's not.
 -/
 
--- Answer here
+-- it is not symmetric because 6/3 = 2 but 3/6 does 
+--not yield a natural number. So 3 divides 6 but 6 does not divide 3. 
+--There is no k of type Nat that satisfies 3= k*6.
 
 /- 
-#3e. Prove that divides is antisymmetric. Use the
-anti_symmetric predicate to state the proposition
-formally.
+#F. Prove that divides is antisymmetric. 
 -/
-example : relations.anti_symmetric divides := 
-begin
-  unfold relations.anti_symmetric divides,
-  assume x y kx ky,
-  cases kx with kxv kxpf,
-  cases ky with kyv kypf,
-  rw kxpf at kypf,
-  /-
-  From kypf we can deduce by basic algebra
-  that kyv = kxv = 1, and the rewriting kxv
-  as 1 in kxpf, we get that y = x. The proof
-  of the conclusion then follows by symmetry
-  of equality. We don't yet quite have the
-  tools to reason formally to the conlusion
-  that kxv and kyv are both one, so we'll 
-  just admit it as an axiom for now, using
-  sorry to remind us to come back and visit
-  this point again when we're equipped to 
-  polish off the formal proof.
-  -/
-  sorry,  
+example : anti_symmetric divides := 
+begin  
+  unfold anti_symmetric,
+  assume x y,
+  unfold divides,
+  assume xdivy ydivx,
+  cases xdivy with k,
+  cases ydivx with j,  
+
+
 end
 
 
+/- #4
+Prove the following propositions. Remember that
+throughout this file, each definition implicitly
+includes β as a type and r as an arbitrary binary 
+relation on β. In addition to formal proofs, give
+an English language proof of the last of the three
+problems.
+-/
+
+-- A
 example : asymmetric r → irreflexive r :=
 begin
   unfold asymmetric irreflexive,
-  assume h x k,
-  have nk := h k,
+  assume assym,
+  assume x,
+  assume xx,
+  have nxx:= assym xx,
   contradiction,
 end
 
+-- B
 example : irreflexive r → transitive r → asymmetric r :=
 begin
-  unfold irreflexive transitive,
-  assume h k,
-  assume x y,
-  assume rxy,
-  assume nryx,
-  have f := k rxy nryx,
-  have nrxx := h x,
+  unfold irreflexive transitive asymmetric,
+  assume irr trans,
+  assume x y rxy,
+  have nyy:= irr y,
+  apply not.intro,
+  assume ryx,
+  have yy:= trans ryx rxy,
   contradiction,
 end
 
+-- C
 example : transitive r → ¬ symmetric r → ¬ irreflexive r :=
-_
+begin
+  unfold transitive symmetric irreflexive,
+  assume  trans nsym,
+  assume irr,
+  
+  
+  
+
+ ----idk
+end
 
 
 end relation
