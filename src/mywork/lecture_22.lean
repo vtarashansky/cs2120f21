@@ -138,4 +138,17 @@ end
 
 example (n : ℕ): equivalence (cong_mod_nat n) :=
 begin
+  unfold equivalence reflexive,
+  apply and.intro _ _,
+  assume x,
+  unfold cong_mod_nat, 
+  apply and.intro _ _,
+  unfold symmetric, assume x y,
+  unfold cong_mod_nat,
+  assume h,
+  apply eq.symm h,
+
+  unfold transitive,assume x y z, unfold cong_mod_nat,
+  assume h h2,
+  apply eq.trans h h2,
 end

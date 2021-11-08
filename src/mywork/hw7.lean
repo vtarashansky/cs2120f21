@@ -157,7 +157,6 @@ begin
   apply exists.intro 1,
   cases xdivy with k xdy,
   cases ydivz with j ydz,
-  ring,
   
 end 
 
