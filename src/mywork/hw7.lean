@@ -1,6 +1,10 @@
 import ..instructor.lectures.lecture_23
-
+import tactic.ring
 namespace relation
+
+
+--qbu8hp Vlad Tarashansky
+
 
 -- PRELIMINARY SETUP
 
@@ -44,8 +48,13 @@ begin
   have nrbb:= assym rbb,
   contradiction,
 end
+/-  ENGLISH : If we have a non empty set of type beta and a relation on two betas is asymmetric then it is not reflexive
+It suffices to prove that if the relation is also reflexive we get a cotradiction. So if the relation is reflexive 
+we can get a proof of any element, b, of type beta is relatd to itself, r b b. Then beccause the relation is asymmetric r b b→ ¬ r b b. 
+With these proofs that b is related to itself and b is not related to itself we arrive at a contradiction. -/
 
-
+/-answer : If the type β is uninhabited then it is asymmetric and reflexive because there are no cases of either predicate.
+Universal quantification over an empty set is true. -/
 
 /-
 #2. Logic, like programming, is subtle. It's very easy for humans
@@ -102,6 +111,13 @@ begin
     apply s2s1 xs2,
   
 end
+/-ENGLISH: To prove that subset 1,s1, equals subset 2,s2, given that they are both in a powerset of the same set
+and that they are subsets of each other you must prove that for all values of a type that value exists in both set 1 and set 2. 
+Because set 1 is a subset of set 2 then any value in set 1 is in set 2 and because set 2 is a subset of set 1 then any value in set 1 is in set 2. 
+So set 1 and set 2 contain the same values and are therefore equal.-/
+
+
+
 
 
 /-
@@ -129,6 +145,8 @@ begin
   apply exists.intro n,
   ring,
 end
+/-To prove that 1 divides n you must prove that there exists a value, k, for which n = k*1. 
+If you use n as that value then you must prove that n = n*1. This can be proved by using basic algebra.-/
 
 -- B. For any n, n divides n
 example : ∀ n, divides n n :=
@@ -139,26 +157,47 @@ begin
   ring,
 end
 
+/-To prove that n divides n you must prove that there exists a value, k, for which n = k*n. 
+If you use 1 as that value then you must prove that n = 1*n. This can be proved by using basic algebra.-/
+
+
+
+
 -- #C. prove that divides is reflexive 
 example : reflexive divides :=
 begin
   unfold reflexive,
-  assume x,
+  assume n,
   unfold divides,
   apply exists.intro 1,
   ring,
 end 
+/-To prove that divides is reflexive it suffices to prove that for all values, n, n divides n.To prove that 
+n divides n you must prove that there exists a value, k, for which n = k*n. 
+If you use 1 as that value then you must prove that n = 1*n. This can be proved by using basic algebra.-/
+
+
 
 -- #D. prove that divides is transitive
 example : transitive divides :=
 begin
   unfold transitive divides,
   assume x y z xdivy ydivz,
-  apply exists.intro 1,
-  cases xdivy with k xdy,
-  cases ydivz with j ydz,
   
+ -- apply exists.intro 1,
+  cases xdivy with m1 xdy,
+  cases ydivz with m2 ydz,
+  apply exists.intro (m1*m2),
+  rw ydz,
+  rw xdy,
+  ring,
 end 
+
+/-To prove that divides is transitive you  must prove, given three values, x y z, and given that
+ x divides y and y divides z, that x divides z. To do this you do a case analysis on proofs of 
+ x divides y and y divides z. Then to prove that x divides z you must prove there exists a value, k, for which
+ z = k * x. That value of k will be that multiliers value in the proofs of x divides y and y divides z. Lets call those multipliers m1 and m2,respectively.
+ If we use m1*m2 as our k value then it suffices to prove that z = m1*m2*x. Rewriting this equation using y divides x and x divides x then using basic algebra proves it.-/
 
 /- 
 E. Is divides symmetric? if yes, give a proof, otherwise 
@@ -173,14 +212,20 @@ it's not.
 /- 
 #F. Prove that divides is antisymmetric. 
 -/
+
+
 example : anti_symmetric divides := 
-begin  
-  unfold anti_symmetric,
-  assume x y,
-  unfold divides,
-  assume xdivy ydivx,
-  cases xdivy with k,
-  cases ydivx with j,  
+begin   
+  
+  unfold anti_symmetric divides,
+  assume x y  xdy ydx,
+  
+  cases xdy with q xdy,
+  cases ydx with w ydx,
+  rw ydx,
+  have cmon: w=1:=sorry,
+  rw cmon,
+  ring,
 
 
 end
@@ -219,17 +264,34 @@ begin
   contradiction,
 end
 
--- C
-example : transitive r → ¬ symmetric r → ¬ irreflexive r :=
+-- C----------------------------------------------------------------
+example :  transitive r → ¬ symmetric r → ¬ irreflexive r :=
 begin
   unfold transitive symmetric irreflexive,
   assume  trans nsym,
   assume irr,
   
-  
-  
+      --try to prove if transitive must be symm
+  --apply nsym,
+  --assume x y xy,
+      --can get proof of ¬ r x x   and  ¬ r y y
+      --Transitive does not imply symmetric  Dead End
 
- ----idk
+  --nothing else to try here
+  sorry
+end
+
+--attempt with elements
+example : (∃ (x y z: β), true)→ transitive r → ¬ symmetric r → ¬ irreflexive r :=
+begin
+  unfold transitive symmetric irreflexive,
+  assume  e trans nsym,
+  assume irr,
+  cases e with x e,
+  cases e with y e,
+  cases e with z pf,
+  --cant do much unless you add a symmetric relation into the assumptions. But this invalidates everything.
+sorry
 end
 
 
