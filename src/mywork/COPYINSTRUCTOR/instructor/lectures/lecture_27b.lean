@@ -127,7 +127,19 @@ example :
   surjective r → 
   image_set r (dom r) = { b : β | true } :=
 begin
--- homework
+    unfold total_function surjective image_set dom,
+    assume h1,
+    apply set.ext,
+    assume x,
+    split,
+    assume xinset,
+    cases xinset with a,
+    cases xinset_h,
+    apply xinset_h_left,
+
+    assume xinset,
+    
+
 end
 
 /-
