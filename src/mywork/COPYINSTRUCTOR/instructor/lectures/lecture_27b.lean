@@ -422,56 +422,6 @@ def bijectivep := function r ∧ bijective (dom_res r (dom_of_def r))
 -- EXERCISE #2: Prove that the inverse of a bijective function is bijective.
 example : bijective r → bijective (inverse r) :=
 begin
-  assume bij_r,
-  unfold bijective,
-  cases bij_r with sur_r inj_r,
-  unfold surjective,
-  unfold total_function,
-  cases sur_r with tot_r pf_r,
-  cases inj_r with tot_r pf_inj,
-  unfold function,
-  unfold single_valued,
-  apply and.intro,
-  apply and.intro,
-  apply and.intro,
-  assume x y z,
-  assume invrxy invryz,
-  apply pf_inj invrxy invryz, 
-
-  assume a,
-  unfold defined,
-  unfold inverse,
-  cases tot_r with func_r pf_func_r,
-  apply pf_r,
-
-  assume b,
-  cases tot_r,
-  unfold inverse,
-  apply tot_r_right,
-
-  cases tot_r,
-  --unfold inverse,
-  --unfold injective,
-  --unfold total_function,
-  apply and.intro,
-  unfold total_function,
-  apply and.intro,
-  assume a y z, apply pf_inj,
-
-  assume a,
-  unfold defined,
-  apply pf_r,
-
-  assume x y z,
-  unfold inverse,
-  assume irzx irzy,
-  apply tot_r_left irzx irzy,
-
-  
-  
-  
-  
-  
 end
 
 
@@ -481,8 +431,6 @@ function is that function.
 -/
 example : bijective r → (r = inverse (inverse r)) :=
 begin
-  assume bijective,
-  apply eq.refl,
 end
 
 /-
@@ -490,18 +438,9 @@ EXERCISE  #4: Formally state and prove that every injective function
 has a *function* as an inverse.
 -/
 example : injective r → function (inverse r) :=
-  begin -- hint: remember recent work
-    unfold injective,
+  _ -- hint: remember recent work
 
-    unfold function single_valued,
-    assume inj,
-    cases inj with tot pf_inj,
-    cases tot,
-    assume x y z,
-    unfold inverse,
-    assume ryx rzx,
-    apply pf_inj ryx rzx,
-  end
+
 /-
 EXERCISE #5. Is bijectivity transitive? In other words, if the
 relations, s and r, are both bijective, then is the
@@ -517,123 +456,32 @@ False? Present a counterexample.
 -/
 def bij_trans (s : β → γ → Prop)  (r : α → β → Prop) :
   bijective r → bijective s → bijective (composition s r) := 
-  begin 
-    unfold bijective,
-    unfold injective surjective,
-    unfold composition total_function defined function single_valued,
-    assume bijR bijS,
-      cases bijR with sR iR,
-      cases sR with totR allCoDomR,
-      cases totR with funcR allDomR,
-      cases bijS with sS iS,
-      cases sS with totS allCoDomS,
-      cases totS with funcS allDomS,
-      cases iR with totR injR,
-      cases iS with totS injS,
-    apply and.intro,
-    apply and.intro,
-    apply and.intro,
-    assume x y z,
-    assume xTOy,
-    assume xTOz,
-    cases xTOy with b1 xTOy,
-    cases xTOy with sby rxb,
-    cases xTOz with b2 xTOz,
-    cases xTOz with sb2z rxb2,
-    have bb:= funcR rxb rxb2,
-    have sbz: s b1 z, rw bb, exact sb2z,
-    apply funcS sby sbz,
-
-    assume a,
-    cases allDomR a with b1,
-    cases allDomS b1 with b,
-    apply exists.intro b,apply exists.intro b1,
-    apply and.intro h_1 h,
-
-    assume b,
-    cases allCoDomS b with b1,
-    cases allCoDomR b1 with a1,
-    apply exists.intro a1,
-    apply exists.intro b1,
-    exact and.intro h h_1,
-
-    apply and.intro,
-    apply and.intro,
-    assume x y z,
-    assume xTOy xTOz,
-    cases xTOy with b1 xTOy,
-    cases xTOy with sby rxb,
-    cases xTOz with b2 xTOz,
-    cases xTOz with sb2z rxb2,
-    have bb:= funcR rxb rxb2,
-    have sbz: s b1 z, rw bb, exact sb2z,
-    apply funcS sby sbz,
-
-    assume a,
-    cases allDomR a with b1,
-    cases allDomS b1 with b,
-    apply exists.intro b,apply exists.intro b1,
-    apply and.intro h_1 h,
-
-    assume x y z,
-    assume xTOz yTOz,
-    cases xTOz with b1 xz,
-    cases xz with sb1z rxb1,
-    cases yTOz with b2 yz,
-    cases yz with sb2z ryb2,
-    have bb:= injS sb2z sb1z,
-    have rxb2: r x b2, rw bb, exact rxb1,
-    apply injR rxb2 ryb2,
-    end
-
-
-
-
-
-/-def bij_trans (s : β → γ → Prop)  (r : α → β → Prop) :
-  bijective r → bijective s → bijective (composition s r) := 
-  begin 
-    assume bijR bijS,
-      cases bijR with sR iR,
-      cases sR with totR oneInR,
-      cases totR with funcR allDomR,
-      cases bijS with sS iS,
-      cases sS with totS oneInS,
-      cases totS with funcS allDomS,
-    unfold bijective,
-    apply and.intro,
-    unfold surjective,
-    apply and.intro,
-    unfold total_function,
-    apply and.intro,
-    unfold function,
-    unfold single_valued,
-    assume x y z,
-    unfold composition,
-    assume cxy cxz,
-    cases cxy with b sry,
-    cases sry with sby rxb,
-    cases cxz with d srz,
-    cases srz with sdz rxd,
-    have bd:b=d:= funcR rxb rxd,
-    
-    sorry,-- if its a total function and b=d and  s d z ∧ s b y then y=z.
-
-
-    assume a,
-    unfold defined,
-    unfold composition,
-    sorry,
-
-
-    assume b,
-    apply exists.intro,
-    unfold composition,
-    apply exists.intro,
-    apply and.intro,
-    
-    
-  end-/
+begin
+assume br bs,
+split,
+-- surjective
+unfold surjective,
+split,
+  -- compoisition total
+  unfold total_function,
+  split,
+   -- composition is a function
+   unfold function single_valued,
+   assume x y z srxy srxz,
+   unfold bijective at br bs,
+   cases bs,
+   cases br,
+   unfold composition at srxy srxz,
+   unfold surjective at  bs_left,
+   unfold surjective at  br_left,
+   unfold injective at br_right bs_right,
+   cases bs_left,
+   cases br_left,
+   cases bs_right,
+   cases br_right,
+   -- composition is defined for all α 
+-- injective
+end
 
 /-
 In general, an operation (such as inverse, here) that, 
@@ -647,22 +495,6 @@ back to the green ball from which it came, leaving
 the original green ball as the end result, as well.
 An identity function.
 -/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 end functions
 end relations
